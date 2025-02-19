@@ -1,3 +1,5 @@
+import org.gradle.api.JavaVersion
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -9,6 +11,24 @@ android {
     namespace = "com.example.homiya_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:/Users/mytes/Desktop/homiya_app/android/app/homiya.jks")
+            storePassword = "9891100rstore"
+            keyAlias = "homiya"
+            keyPassword = "9891100rstore"
+        }
+    }
+
+      buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -30,15 +50,18 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
-        }
-    }
+   
 }
 
 flutter {
     source = "../.."
+}
+
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
 }
