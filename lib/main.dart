@@ -10,6 +10,9 @@ void main() {
   runApp(MyApp());
 }
 
+bool _isSubmitted =
+    false; // İstifadəçi "Elan göndər" düyməsini basıbsa, true olacaq.
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -116,8 +119,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _submitAd() async {
-    if (_titleController.text.isEmpty || _descriptionController.text.isEmpty)
+    setState(() {
+      _isSubmitted = true; // İstifadəçi düyməyə basıb, errorText aktiv olsun.
+    });
+
+    if (_titleController.text.isEmpty || _descriptionController.text.isEmpty) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Zəhmət olmasa, başlıq və açıqlama sahələrini doldurun!',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
+    }
+
     if (_database == null) return;
 
     List<String> imagePaths = _selectedImages.map((img) => img.path).toList();
@@ -130,8 +148,10 @@ class _HomePageState extends State<HomePage> {
 
     _titleController.clear();
     _descriptionController.clear();
+
     setState(() {
       _selectedImages.clear();
+      _isSubmitted = false; // Form uğurla göndərildikdə səhvlər sıfırlansın.
     });
 
     _loadAds();
@@ -242,13 +262,40 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(height: 10),
                     TextField(
                       controller: _titleController,
-                      decoration: InputDecoration(labelText: 'Başlıq'),
+                      decoration: InputDecoration(
+                        labelText: 'Başlıq',
+                        border: OutlineInputBorder(),
+                        errorText:
+                            _isSubmitted && _titleController.text.isEmpty
+                                ? 'Başlıq boş qala bilməz'
+                                : null,
+                      ),
+                      onChanged: (text) {
+                        setState(
+                          () {},
+                        ); // Yazı dəyişdikdə səhv mesajı yenilənsin
+                      },
                     ),
+
                     SizedBox(height: 10),
+
                     TextField(
                       controller: _descriptionController,
-                      decoration: InputDecoration(labelText: 'Açıqlama'),
+                      decoration: InputDecoration(
+                        labelText: 'Açıqlama',
+                        border: OutlineInputBorder(),
+                        errorText:
+                            _isSubmitted && _descriptionController.text.isEmpty
+                                ? 'Açıqlama boş qala bilməz'
+                                : null,
+                      ),
+                      onChanged: (text) {
+                        setState(
+                          () {},
+                        ); // Yazı dəyişdikdə səhv mesajı yenilənsin
+                      },
                     ),
+
                     SizedBox(height: 10),
                     _selectedImages.isNotEmpty
                         ? SizedBox(
