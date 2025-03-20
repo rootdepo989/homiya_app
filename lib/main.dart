@@ -10,6 +10,8 @@ void main() {
   runApp(MyApp());
 }
 
+bool _isImageSelected = true; // Şəkil seçildi
+
 bool _isSubmitted =
     false; // İstifadəçi "Elan göndər" düyməsini basıbsa, true olacaq.
 
@@ -136,6 +138,14 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
+    if (_selectedImages.isEmpty) {
+      // Şəkil seçilməyibsə
+      setState(() {
+        _isImageSelected = false; // Şəkil seçilməyib
+      });
+      return;
+    }
+
     if (_database == null) return;
 
     List<String> imagePaths = _selectedImages.map((img) => img.path).toList();
@@ -152,6 +162,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedImages.clear();
       _isSubmitted = false; // Form uğurla göndərildikdə səhvlər sıfırlansın.
+      _isImageSelected = false; // Göndərildikdən sonra yenidən false olsun
     });
 
     _loadAds();
@@ -200,6 +211,7 @@ class _HomePageState extends State<HomePage> {
     if (pickedFiles != null && pickedFiles.isNotEmpty) {
       setState(() {
         _selectedImages = pickedFiles.map((file) => File(file.path)).toList();
+        _isImageSelected = true; // Şəkil seçildi
       });
     }
   }
@@ -218,15 +230,15 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {
-              // Tətbiqi paylaşma əmri
-              Share.share('Homiya tətbiqini yükləyin: https://example.com');
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.share),
+        //     onPressed: () {
+        //       // Tətbiqi paylaşma əmri
+        //       Share.share('Homiya tətbiqini yükləyin: https://example.com');
+        //     },
+        //   ),
+        // ],
       ),
       body:
           _isLoading
@@ -341,7 +353,24 @@ class _HomePageState extends State<HomePage> {
                         ElevatedButton.icon(
                           onPressed: _pickImages,
                           icon: Icon(Icons.image),
-                          label: Text('Şəkil Seç'),
+                          label: Text(
+                            'Şəkil Seç',
+                            style:
+                                _isSubmitted &&
+                                        _selectedImages
+                                            .isEmpty // Göndərilibsə və şəkil seçilməyibsə
+                                    ? TextStyle(
+                                      color: Colors.white,
+                                    ) // Mətni ağ et
+                                    : null, // Əks halda standart stil
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                _isSubmitted && _selectedImages.isEmpty
+                                    ? Colors
+                                        .red // Şəkil seçilməyibsə və göndərilibsə qırmızı
+                                    : null, // Əks halda standart rəng
+                          ),
                         ),
                         ElevatedButton(
                           onPressed: _submitAd,
