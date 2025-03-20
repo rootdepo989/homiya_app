@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         cardColor: Colors.white, // Ağ kart fonu
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Colors.blue[50], // Açıq mavi fon
+          fillColor: Colors.blue[50],
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(color: Colors.blue[200]!),
