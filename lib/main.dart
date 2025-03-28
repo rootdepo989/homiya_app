@@ -246,12 +246,12 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SpinKitWave(color: Colors.blue, size: 50.0),
+                    SpinKitWave(color: Colors.blue, size: 45.0),
                     SizedBox(width: 10),
                     Text(
                       'HOMİYA',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
                       ),
@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               )
               : Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     TextField(
@@ -386,63 +386,46 @@ class _HomePageState extends State<HomePage> {
                               _filteredAds[index]['imagePaths']?.split(',') ??
                               [];
                           return SizedBox(
-                            width: double.infinity, // Genişliyi 100% etmək üçün
+                            width: double.infinity,
                             child: Card(
-                              margin: EdgeInsets.all(5),
+                              margin: EdgeInsets.all(4),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                              elevation: 5,
-                              color: const Color.fromARGB(
-                                255,
-                                69,
-                                99,
-                                112,
-                              ), // Tündləşdirilmiş fon
+                              elevation: 3,
+                              color: Color(0xFF456370),
                               child: Padding(
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.all(10),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Align(
-                                      alignment:
-                                          Alignment
-                                              .centerRight, // Sağ tərəfə yerləşdirir
+                                      alignment: Alignment.centerRight,
                                       child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          _shareTexts(index);
-                                        },
+                                        onPressed: () => _shareTexts(index),
                                         icon: Icon(
                                           Icons.share,
-                                          color:
-                                              Colors
-                                                  .white, // Minimalist ağ ikon
-                                          size: 18, // Kiçik ikon
+                                          color: Colors.white,
+                                          size: 16,
                                         ),
                                         label: Text(
                                           'Mətni Paylaş',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize:
-                                                14, // Kiçik və minimalist mətn
+                                            fontSize: 13,
                                           ),
                                         ),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                            255,
-                                            69,
-                                            99,
-                                            112,
-                                          ), // Tündləşdirilmiş fon
-                                          elevation: 0, // Kölgəni silir
+                                          backgroundColor: Color(0xFF456370),
+                                          elevation: 0,
                                           padding: EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 8,
-                                          ), // Kiçik ölçü
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                               8,
-                                            ), // Yumşaq künclər
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -450,31 +433,22 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       _filteredAds[index]['title'],
                                       style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white, // Başlıq ağ rəngdə
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
                                       ),
                                     ),
-
-                                    SizedBox(height: 5),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10,
-                                      ), // Sola və sağa 10px boşluq
-                                      child: Text(
-                                        _filteredAds[index]['description'],
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color:
-                                              Colors
-                                                  .grey[400], // Açıq boz rəngdə təsvir
-                                        ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      _filteredAds[index]['description'],
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.grey[300],
                                       ),
                                     ),
-
                                     if (imagePaths.isNotEmpty)
                                       SizedBox(
-                                        height: 150,
+                                        height: 80,
                                         child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: imagePaths.length,
@@ -485,24 +459,23 @@ class _HomePageState extends State<HomePage> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder:
-                                                        (
-                                                          context,
-                                                        ) => FullScreenImageSlider(
-                                                          images:
-                                                              imagePaths, // Bütün şəkillər
-                                                          initialIndex:
-                                                              imgIndex, // Açılan şəkilin indeksi
-                                                        ),
+                                                        (context) =>
+                                                            FullScreenImageSlider(
+                                                              images:
+                                                                  imagePaths,
+                                                              initialIndex:
+                                                                  imgIndex,
+                                                            ),
                                                   ),
                                                 );
                                               },
                                               child: ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                    BorderRadius.circular(8),
                                                 child: Image.file(
                                                   File(imagePaths[imgIndex]),
-                                                  height: 150,
-                                                  width: 150,
+                                                  height: 80,
+                                                  width: 80,
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -510,54 +483,52 @@ class _HomePageState extends State<HomePage> {
                                           },
                                         ),
                                       ),
-                                    SizedBox(height: 10),
+                                    SizedBox(height: 6),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () {
-                                            _deleteAd(
-                                              _filteredAds[index]['id'],
-                                            );
-                                          },
+                                          onPressed:
+                                              () => _deleteAd(
+                                                _filteredAds[index]['id'],
+                                              ),
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors.white, // Ağ fon
-                                            side: BorderSide(
-                                              color: Colors.red,
-                                            ), // Qırmızı sərhəd
+                                            backgroundColor: Colors.white,
+                                            side: BorderSide(color: Colors.red),
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
                                           ),
                                           child: Text(
                                             'Sil',
                                             style: TextStyle(
                                               color: Colors.red,
-                                            ), // Qırmızı rəngli düymə
+                                              fontSize: 13,
+                                            ),
                                           ),
                                         ),
-
                                         ElevatedButton.icon(
-                                          onPressed: () {
-                                            _shareImages(index);
-                                          },
+                                          onPressed: () => _shareImages(index),
                                           icon: Icon(
                                             Icons.share,
-                                            color:
-                                                Colors.blue[800], // Mavi ikon
+                                            color: Colors.blue[800],
+                                            size: 16,
                                           ),
                                           label: Text(
                                             'Şəkil Paylaş',
                                             style: TextStyle(
                                               color: Colors.blue[800],
-                                            ), // Mavi yazı
+                                              fontSize: 13,
+                                            ),
                                           ),
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                Colors
-                                                    .blue[50], // Açıq mavi fon
-                                            foregroundColor:
-                                                Colors
-                                                    .blue[800], // Mavi yazı və ikon
+                                            backgroundColor: Colors.blue[50],
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 4,
+                                            ),
                                           ),
                                         ),
                                       ],
