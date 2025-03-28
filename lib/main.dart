@@ -585,11 +585,30 @@ class FullScreenImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: Text('Şəkil Baxışı'),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
-      body: Center(child: Image.file(image)),
+      body: Stack(
+        children: [
+          Center(child: Image.file(image, fit: BoxFit.contain)),
+          Positioned(
+            top: 16.0,
+            right: 16.0,
+            child: SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -622,20 +641,41 @@ class _FullScreenImageSliderState extends State<FullScreenImageSlider> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: GestureDetector(
-        onTap: () => Navigator.pop(context), // Ekrana toxunduqda geri qayıdır
-        child: PageView.builder(
-          controller: _pageController,
-          itemCount: widget.images.length,
-          itemBuilder: (context, index) {
-            return Center(
-              child: Image.file(
-                File(widget.images[index]),
-                fit: BoxFit.contain, // Şəkil tam göstərilsin
+      body: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            itemCount: widget.images.length,
+            itemBuilder: (context, index) {
+              return Center(
+                child: Image.file(
+                  File(widget.images.elementAt(index)),
+                  fit: BoxFit.contain,
+                ),
+              );
+            },
+          ),
+          Positioned(
+            top: 16.0,
+            left: 16.0,
+            child: SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Positioned(
+            top: 16.0,
+            right: 16.0,
+            child: SafeArea(
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
