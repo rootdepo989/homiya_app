@@ -22,7 +22,12 @@ class MyApp extends StatelessWidget {
       title: 'Elan Bazası',
       theme: ThemeData.light().copyWith(
         // Açıq tema istifadə edin
-        scaffoldBackgroundColor: Colors.white, // Ağ fon
+        scaffoldBackgroundColor: const Color.fromRGBO(
+          127,
+          170,
+          196,
+          1,
+        ), // Ağ fon
         cardColor: Colors.white, // Ağ kart fonu
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
@@ -431,6 +436,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                         ElevatedButton(
                           onPressed: _submitAd,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors
+                                    .green
+                                    .shade400, // Və ya başqa uyğun yaşıl ton
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
                           child: Text('Bazaya Göndər'),
                         ),
                       ],
