@@ -268,7 +268,28 @@ class _HomePageState extends State<HomePage> {
                       onChanged: (value) => _filterAds(),
                       decoration: InputDecoration(
                         labelText: 'Bazadan Axtarış Et',
-                        prefixIcon: Icon(Icons.search),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.indigo,
+                        ), // Aksent rəngdə ikon
+                        filled: true,
+                        fillColor: Colors.grey.shade200, // Açıq boz dolğu
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300!,
+                          ), // İnci boz kənar xətt
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          // Fokuslandıqda
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Colors.indigoAccent,
+                          ), // Aksent rəng
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.grey.shade600,
+                        ), // İşarə mətni rəngi
                       ),
                     ),
                     SizedBox(height: 8),
@@ -276,16 +297,34 @@ class _HomePageState extends State<HomePage> {
                       controller: _titleController,
                       decoration: InputDecoration(
                         labelText: 'Başlıq',
-                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.grey.shade300!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.indigoAccent),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          // Səhv halı üçün
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.redAccent),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          // Fokusda ikən səhv halı
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.redAccent),
+                        ),
+                        labelStyle: TextStyle(color: Colors.grey.shade600),
                         errorText:
                             _isSubmitted && _titleController.text.isEmpty
                                 ? 'Başlıq boş qala bilməz'
                                 : null,
                       ),
                       onChanged: (text) {
-                        setState(
-                          () {},
-                        ); // Yazı dəyişdikdə səhv mesajı yenilənsin
+                        setState(() {});
                       },
                     ),
 
@@ -295,16 +334,34 @@ class _HomePageState extends State<HomePage> {
                       controller: _descriptionController,
                       decoration: InputDecoration(
                         labelText: 'Açıqlama',
-                        border: OutlineInputBorder(),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.grey.shade300!),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.indigoAccent),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          // Səhv halı üçün
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.redAccent),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          // Fokusda ikən səhv halı
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(color: Colors.redAccent),
+                        ),
+                        labelStyle: TextStyle(color: Colors.grey.shade600),
                         errorText:
                             _isSubmitted && _descriptionController.text.isEmpty
                                 ? 'Açıqlama boş qala bilməz'
                                 : null,
                       ),
                       onChanged: (text) {
-                        setState(
-                          () {},
-                        ); // Yazı dəyişdikdə səhv mesajı yenilənsin
+                        setState(() {});
                       },
                     ),
 
@@ -383,17 +440,38 @@ class _HomePageState extends State<HomePage> {
                         itemCount: _filteredAds.length,
                         itemBuilder: (context, index) {
                           List<String> imagePaths =
-                              _filteredAds[index]['imagePaths']?.split(',') ??
+                              _filteredAds
+                                  .elementAt(index)['imagePaths']
+                                  ?.split(',') ??
                               [];
                           return SizedBox(
                             width: double.infinity,
                             child: Card(
-                              margin: EdgeInsets.all(4),
+                              margin: EdgeInsets.only(
+                                top: 10,
+                                bottom: 8,
+                                left: 4,
+                                right: 4,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(
+                                  color: const Color.from(
+                                    alpha: 1,
+                                    red: 0.624,
+                                    green: 0.659,
+                                    blue: 0.855,
+                                  ),
+                                  width: 1.0,
+                                ), // Aksent rəngində kənar xətt
                               ),
-                              elevation: 3,
-                              color: Color(0xFF456370),
+                              elevation: 2, // Daha incə kölgə
+                              color: const Color.fromRGBO(
+                                238,
+                                238,
+                                238,
+                                1,
+                              ), // Açıq boz fon
                               child: Padding(
                                 padding: EdgeInsets.all(10),
                                 child: Column(
@@ -405,18 +483,27 @@ class _HomePageState extends State<HomePage> {
                                         onPressed: () => _shareTexts(index),
                                         icon: Icon(
                                           Icons.share,
-                                          color: Colors.white,
+                                          color:
+                                              Colors
+                                                  .indigo, // Aksent rəngdə ikon
                                           size: 16,
                                         ),
                                         label: Text(
                                           'Mətni Paylaş',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color:
+                                                Colors
+                                                    .indigo, // Aksent rəngdə mətn
                                             fontSize: 13,
                                           ),
                                         ),
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color(0xFF456370),
+                                          backgroundColor: const Color.fromRGBO(
+                                            238,
+                                            238,
+                                            238,
+                                            1,
+                                          ), // Açıq boz fon
                                           elevation: 0,
                                           padding: EdgeInsets.symmetric(
                                             horizontal: 8,
@@ -431,19 +518,25 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Text(
-                                      _filteredAds[index]['title'],
+                                      _filteredAds.elementAt(index)['title'],
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.white,
+                                        color:
+                                            Colors.black87, // Tünd yazı rəngi
                                       ),
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      _filteredAds[index]['description'],
+                                      _filteredAds.elementAt(
+                                        index,
+                                      )['description'],
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: Colors.grey[300],
+                                        color:
+                                            Colors
+                                                .grey
+                                                .shade600, // Daha açıq təsvir rəngi
                                       ),
                                     ),
                                     if (imagePaths.isNotEmpty)
@@ -473,7 +566,11 @@ class _HomePageState extends State<HomePage> {
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 child: Image.file(
-                                                  File(imagePaths[imgIndex]),
+                                                  File(
+                                                    imagePaths.elementAt(
+                                                      imgIndex,
+                                                    ),
+                                                  ),
                                                   height: 80,
                                                   width: 80,
                                                   fit: BoxFit.cover,
@@ -491,43 +588,62 @@ class _HomePageState extends State<HomePage> {
                                         ElevatedButton(
                                           onPressed:
                                               () => _deleteAd(
-                                                _filteredAds[index]['id'],
+                                                _filteredAds.elementAt(
+                                                  index,
+                                                )['id'],
                                               ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.white,
-                                            side: BorderSide(color: Colors.red),
+                                            foregroundColor:
+                                                Colors
+                                                    .redAccent, // Qırmızı mətn
+                                            side: BorderSide(
+                                              color: Colors.redAccent,
+                                            ),
                                             padding: EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 4,
+                                              horizontal: 12,
+                                              vertical: 8,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                           child: Text(
                                             'Sil',
-                                            style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: 13,
-                                            ),
+                                            style: TextStyle(fontSize: 13),
                                           ),
                                         ),
                                         ElevatedButton.icon(
                                           onPressed: () => _shareImages(index),
                                           icon: Icon(
                                             Icons.share,
-                                            color: Colors.blue[800],
+                                            color:
+                                                Colors
+                                                    .indigo, // Aksent rəngdə ikon
                                             size: 16,
                                           ),
                                           label: Text(
                                             'Şəkil Paylaş',
                                             style: TextStyle(
-                                              color: Colors.blue[800],
+                                              color:
+                                                  Colors
+                                                      .indigo, // Aksent rəngdə mətn
                                               fontSize: 13,
                                             ),
                                           ),
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.blue[50],
+                                            backgroundColor:
+                                                Colors
+                                                    .grey
+                                                    .shade200, // Açıq boz fon
                                             padding: EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 4,
+                                              horizontal: 12,
+                                              vertical: 8,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
                                           ),
                                         ),
