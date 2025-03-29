@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Elan Yükləmə',
+      title: 'Elan Bazası',
       theme: ThemeData.light().copyWith(
         // Açıq tema istifadə edin
         scaffoldBackgroundColor: Colors.white, // Ağ fon
@@ -226,7 +226,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text(
               'Homiya',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -267,11 +267,11 @@ class _HomePageState extends State<HomePage> {
                       controller: _searchController,
                       onChanged: (value) => _filterAds(),
                       decoration: InputDecoration(
-                        labelText: 'Elan axtar',
+                        labelText: 'Bazadan Axtarış Et',
                         prefixIcon: Icon(Icons.search),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 8),
                     TextField(
                       controller: _titleController,
                       decoration: InputDecoration(
@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
 
-                    SizedBox(height: 10),
+                    SizedBox(height: 8),
 
                     TextField(
                       controller: _descriptionController,
@@ -374,7 +374,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         ElevatedButton(
                           onPressed: _submitAd,
-                          child: Text('Elan Göndər'),
+                          child: Text('Bazaya Göndər'),
                         ),
                       ],
                     ),
