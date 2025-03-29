@@ -171,12 +171,24 @@ class _HomePageState extends State<HomePage> {
     });
 
     _loadAds();
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      SnackBar(
+        content: Text('Toplam elan sayı: ${_ads.length}'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> _deleteAd(int id) async {
     if (_database == null) return;
     await _database!.delete('ads', where: 'id = ?', whereArgs: [id]);
     _loadAds();
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      SnackBar(
+        content: Text('Toplam elan sayı: ${_ads.length}'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   // Başlıq və Açıqlamanı paylaş
@@ -224,44 +236,66 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 69, 99, 112),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Homiya',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.share),
-        //     onPressed: () {
-        //       // Tətbiqi paylaşma əmri
-        //       Share.share('Homiya tətbiqini yükləyin: https://example.com');
-        //     },
-        //   ),
-        // ],
-      ),
-      body:
+      appBar:
           _isLoading
-              ? Center(
-                child: Row(
+              ? null // Loading zamanı AppBar-ı göstərmə
+              : AppBar(
+                backgroundColor: const Color.fromARGB(255, 69, 99, 112),
+                title: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SpinKitWave(color: Colors.blue, size: 45.0),
-                    SizedBox(width: 10),
                     Text(
-                      'HOMİYA',
+                      'Toplam elan sayı: ${_ads.length}',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blue,
+                        color: Colors.white,
                       ),
                     ),
                   ],
+                ),
+                // actions: [
+                //   IconButton(
+                //     icon: Icon(Icons.share),
+                //     onPressed: () {
+                //       // Tətbiqi paylaşma əmri
+                //       Share.share('Homiya tətbiqini yükləyin: https://example.com');
+                //     },
+                //   ),
+                // ],
+              ),
+      body:
+          _isLoading
+              ? Container(
+                color:
+                    Theme.of(
+                      context,
+                    ).scaffoldBackgroundColor, // Arxa plan rəngini tətbiqin fon rəngi ilə eyniləşdirin
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SpinKitFadingCircle(
+                        // Daha incə bir animasyon
+                        color: const Color.fromRGBO(
+                          255,
+                          255,
+                          255,
+                          1,
+                        ), // Aksent rəngi istifadə edin
+                        size: 60.0,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Məlumatlar Yüklənir...',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: const Color.fromRGBO(255, 252, 252, 1),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               )
               : Padding(
@@ -601,20 +635,9 @@ class _HomePageState extends State<HomePage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         ElevatedButton(
-                                          onPressed:
-                                              () => _deleteAd(
-                                                _filteredAds.elementAt(
-                                                  index,
-                                                )['id'],
-                                              ),
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.white,
-                                            foregroundColor:
-                                                Colors
-                                                    .redAccent, // Qırmızı mətn
-                                            side: BorderSide(
-                                              color: Colors.redAccent,
-                                            ),
+                                            foregroundColor: Colors.redAccent,
                                             padding: EdgeInsets.symmetric(
                                               horizontal: 12,
                                               vertical: 8,
@@ -624,10 +647,47 @@ class _HomePageState extends State<HomePage> {
                                                   BorderRadius.circular(8),
                                             ),
                                           ),
-                                          child: Text(
-                                            'Sil',
-                                            style: TextStyle(fontSize: 13),
-                                          ),
+                                          child: Icon(Icons.delete, size: 20),
+                                          onPressed: () {
+                                            showDialog(
+                                              context:
+                                                  context, // Bu cari kartın context-i
+                                              builder: (
+                                                BuildContext dialogContext,
+                                              ) {
+                                                return AlertDialog(
+                                                  title: Text('Elanı Sil'),
+                                                  content: Text(
+                                                    'Elan Bazadan silinəcək. Silinsin?',
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child: Text('Xeyr'),
+                                                      onPressed: () {
+                                                        Navigator.of(
+                                                          dialogContext,
+                                                        ).pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text('Bəli'),
+                                                      onPressed: () async {
+                                                        Navigator.of(
+                                                          dialogContext,
+                                                        ).pop();
+                                                        await _deleteAd(
+                                                          _filteredAds
+                                                              .elementAt(
+                                                                index,
+                                                              )['id'],
+                                                        ); // _deleteAd-ı çağır
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
                                         ),
                                         ElevatedButton.icon(
                                           onPressed: () => _shareImages(index),
