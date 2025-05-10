@@ -12,19 +12,38 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
-    signingConfigs {
-        create("release") {
-            storeFile = file("C:/Users/mytes/Desktop/homiya_app/android/app/homiya.jks")
-            storePassword = "9891100rstore"
-            keyAlias = "homiya"
-            keyPassword = "9891100rstore"
+   signingConfigs {
+    create("release") {
+        // DİAQNOSTİKA ÜÇÜN ƏLAVƏLƏR:
+        println("--- Keystore Debug ---")
+        println("Attempting to configure signing for release.")
+        println("Does project have MYAPP_KEYSTORE property? " + project.hasProperty("MYAPP_KEYSTORE"))
+
+        if (project.hasProperty("MYAPP_KEYSTORE")) {
+            val keystorePathFromProps = project.property("MYAPP_KEYSTORE") as String
+            println("MYAPP_KEYSTORE from props: '$keystorePathFromProps'") // Dırnaqlar içində göstərəcək ki, boşluqlar var ya yox
+            
+            storeFile = file(keystorePathFromProps) // Bu sətri olduğu kimi saxlayırıq
+            println("Resolved storeFile path: '${storeFile?.absolutePath}'") // ?.absolutePath əlavə etdim ki, null olsa xəta verməsin
+
+            // Şifrələr və alias üçün də eyni yoxlamanı edə bilərik, amma əsas problem yol ilə bağlıdır
+            storePassword = project.property("MYAPP_STORE_PASSWORD") as String
+            keyAlias = project.property("MYAPP_KEY_ALIAS") as String
+            keyPassword = project.property("MYAPP_KEY_PASSWORD") as String
+            println("Keystore password, alias, keyPassword are being set from properties.")
+        } else {
+            println("Warning: MYAPP_KEYSTORE property not found in gradle.properties.kts or other sources.")
+            println("Build will likely fail or use a default debug keystore if available elsewhere.")
+            // Burada başqa bir default konfiqurasiya yoxdursa, imzalama baş tutmayacaq.
         }
+        println("--- End Keystore Debug ---")
     }
+}
 
       buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
-            isShrinkResources = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
